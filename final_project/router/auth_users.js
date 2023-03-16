@@ -72,6 +72,7 @@ regd_users.delete("/auth/review/:isbn", (req, res) => {
             return val;
         }
     })
+    return res.status(200).json({message: "Review Successfully Removed!"});
 });
 
 module.exports.authenticated = regd_users;
