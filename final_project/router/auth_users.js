@@ -44,20 +44,22 @@ regd_users.post("/login", (req,res) => {
 
 // Add a book review
 regd_users.put("/auth/review/:isbn", (req, res) => {
-    let review = req.query.review;
+    const isbn = req.params.isbn; 
+    const review = req.query.review;
+    
     if (JSON.stringify(books[isbn].reviews) === "{}"){
-        books[isbn].reviews = [{"username":req.session.username, "review": review}];
+        books[isbn].reviews = [{"username":req.session.authorization.username, "review": review}];
     
     } else{
         let found = false
         for (let i=0; i<books[isbn].reviews.length; i++){
-            if (books[isbn].reviews[i].username === req.session.username){
+            if (books[isbn].reviews[i].username === req.session.authorization.username){
                 found = true;
                 books[isbn].reviews[i].review = review;
             }
         }
         if (!found){
-            books[isbn].reviews.push({"username":req.session.username, "review": review});
+            books[isbn].reviews.push({"username":req.session.authorization.username, "review": review});
         }
     }
     return res.status(200).json({message: "Review Successfully Added!"});
